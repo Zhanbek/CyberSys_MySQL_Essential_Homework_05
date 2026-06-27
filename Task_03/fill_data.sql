@@ -6,7 +6,8 @@ VALUES
 INSERT INTO positions(Id, Name)
 VALUES 
 (1, 'Manager'),
-(2, 'QA Ingeneer');
+(2, 'QA Ingeneer'),
+(3, 'головний директор');
 --
 INSERT INTO Employee_Details(Employee_Id, Marital_Status, BirthDate, Address)
 VALUES 

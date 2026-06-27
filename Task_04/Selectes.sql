@@ -1,18 +1,45 @@
-SELECT e.*, ed.Address 
-FROM myjoinsdb.employees as e
-JOIN myjoinsdb.employee_details as ed ON e.Id = ed.employee_id;
+SELECT e.*, 
+       (
+         SELECT ed.Address 
+         FROM myjoinsdb.employee_details as ed 
+         WHERE ed.employee_id =  e.Id
+        ) as address
+FROM myjoinsdb.employees as e;
 --
 --
-SELECT e.*, ed.BirthDate, ed.Marital_Status
-FROM myjoinsdb.employees as e
-JOIN myjoinsdb.employee_details as ed ON e.Id = ed.employee_id
+SELECT (
+		SELECT e.Name
+        FROM myjoinsdb.employees as e
+        WHERE e.Id = ed.employee_id
+	   ) as Name,
+       (
+		SELECT e.Phone
+        FROM myjoinsdb.employees as e
+        WHERE e.Id = ed.employee_id
+	   ) as Phone,       
+      ed.BirthDate
+FROM myjoinsdb.employee_details as ed 
 WHERE ed.Marital_Status = 'Неодружений';
 --
 --
-SELECT e.*, ed.BirthDate,  eps.begin_date, eps.end_date
-FROM myjoinsdb.employees as e
-JOIN myjoinsdb.employees_positions_salaries as eps ON eps.Employee_id = e.Id
+SELECT (
+          SELECT e.Name
+          FROM myjoinsdb.employees as e
+          WHERE e.Id = eps.Employee_id
+        ) as Name,
+        (
+          SELECT e.Phone
+          FROM myjoinsdb.employees as e
+          WHERE e.Id = eps.Employee_id
+        ) as Phone,        
+        (
+          SELECT ed.BirthDate
+          FROM myjoinsdb.employee_details ed 
+          WHERE ed.employee_id = eps.Employee_id
+        ) as Birthdate,
+       eps.begin_date, 
+       eps.end_date
+FROM myjoinsdb.employees_positions_salaries as eps 
 JOIN myjoinsdb.positions as p ON p.Id = eps.Position_id
-JOIN myjoinsdb.employee_details ed on ed.employee_id = e.Id
 WHERE p.Name = 'Manager'
   AND eps.end_date IS NULL
